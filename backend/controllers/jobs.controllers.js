@@ -33,12 +33,11 @@ const handelPostJobs = async(req,res)=>{
 };
 
 const handelGetJobsByUserId = async(req,res)=>{
-    const {id} = req.params;
-
     try {
-        const job = await Job.findById({userId:id});
+        const job = await Job.find({userId:req.user.user});
+      if(!job)return res.status(404).json({message:"Job not found"});
         res.status(200).json(job);
-    }catch{
+    }catch(error){
         res.status(500).json({error:error.message});
     }
 

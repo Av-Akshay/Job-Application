@@ -6,8 +6,8 @@ const router = express.Router();
 
 
 router.get("/",protect,authorizeRoles("user"),handelGetJobs);
-router.get("/jobs/:id",protect,authorizeRoles("company"),handelGetJobsByUserId);
-router.get("/post-job",protect,authorizeRoles("company"),handelPostJobs);
+router.get("/companyjobs/:id",protect,authorizeRoles("company"),handelGetJobsByUserId);
+router.post("/post-job",protect,authorizeRoles("company"),handelPostJobs);
 router.get("/apply-job/:id",protect,authorizeRoles("company"),handelAppliedJob);
 
 

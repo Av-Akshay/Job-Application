@@ -15,7 +15,7 @@ const handelRegisterUser = async (req, res) => {
     const users = await User.create({ name, email, password, role });
     const token = jwt.sign({ user:users._id, role:users.role }, process.env.JWT_SECRET);
 
-    res.json({ message: "Success", user:{id:users._id,name,email,role}, token: { token } });
+    res.json({ message: "Success", user:{id:users._id,name,email,role}, token: token  });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -27,6 +27,8 @@ const handelLoginUser = async (req, res) => {
     return res.status(400).json({ message: "Please fill all the fields" });
   try {
     const exitsUser = await User.findOne({ email });
+    console.log(exitsUser);
+    
     if (!exitsUser) return res.status(409).json({ message: "User not find" });
     const isMatch = await bcrypt.compare(password, exitsUser.password);
     if (!isMatch) return res.status(409).json({ message: "Wrong password" });
