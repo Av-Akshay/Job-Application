@@ -1,4 +1,4 @@
-import {HeroSection,JobCategories, FeatureJobSection} from "../components/index";
+import {HeroSection,JobCategories, FeatureJobSection, CTASection} from "../components/index";
 
 const Home = () => {
   return (
@@ -6,6 +6,7 @@ const Home = () => {
       <HeroSection />
       <JobCategories/>
       <FeatureJobSection/>
+      <CTASection />
     </>
   )
 }
