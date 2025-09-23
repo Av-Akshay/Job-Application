@@ -1,14 +1,14 @@
 import useGetJobs from "../../hooks/useGetJobs";
-import Input from "../../lib/Input";
+import AutocompleteInput from "../AutocompleteInput";
 import { WavyBackground } from "./WavyBackground";
-// import useGetJobs from "../../hooks/useGetJobs";
+import { jobTitles, indianCitiesAndStates } from "../../data/suggestions";
 
 
 
 
 
 const HeroSection = () => {
-  const { register, handleSubmit, submitform } = useGetJobs();
+  const { register, handleSubmit, submitform, setValue } = useGetJobs();
 
   return (
     <WavyBackground className="max-w-4xl mx-auto pb-40">
@@ -20,17 +20,23 @@ const HeroSection = () => {
       </p>
       
       <form onSubmit={handleSubmit(submitform)} className="mt-8 flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
-        <Input 
+        <AutocompleteInput 
           {...register("searchTitle")}
+          suggestions={jobTitles}
           type="text" 
-          placeholder="Job title, keywords, or company" 
-          className="flex-1 bg-white/90 backdrop-blur-sm" 
+          placeholder="Job title" 
+          className="w-full px-4 py-2 rounded-md border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/90 backdrop-blur-sm"
+          containerClassName="flex-1"
+          onSuggestionSelect={(value) => setValue("searchTitle", value)}
         />
-        <Input 
+        <AutocompleteInput 
           {...register("location")}
+          suggestions={indianCitiesAndStates}
           type="text" 
-          placeholder="City, state, or remote" 
-          className="flex-1 bg-white/90 backdrop-blur-sm" 
+          placeholder="City or State" 
+          className="w-full px-4 py-2 rounded-md border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/90 backdrop-blur-sm"
+          containerClassName="flex-1"
+          onSuggestionSelect={(value) => setValue("location", value)}
         />
         <button 
           type="submit"
