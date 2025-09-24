@@ -12,6 +12,7 @@ const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const [hasSelected, setHasSelected] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const suggestionRefs = useRef<(HTMLLIElement | null)[]>([]);
 
@@ -27,7 +28,7 @@ const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
     }, []);
 
     useEffect(() => {
-      if (inputValue.length > 0) {
+      if (!hasSelected && inputValue.length > 0) {
         const filtered = suggestions.filter(suggestion =>
           suggestion.toLowerCase().includes(inputValue.toLowerCase())
         ).slice(0, 10);
@@ -38,7 +39,7 @@ const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
         setFilteredSuggestions([]);
       }
       setHighlightedIndex(-1);
-    }, [inputValue, suggestions]);
+    }, [inputValue, suggestions, hasSelected]);
 
     useEffect(() => {
       if (highlightedIndex >= 0 && highlightedIndex < suggestionRefs.current.length) {
@@ -52,6 +53,7 @@ const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setInputValue(value);
+      setHasSelected(false);
       if (inputProps.onChange) {
         inputProps.onChange(e);
       }
@@ -60,6 +62,7 @@ const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
     const handleSuggestionClick = (suggestion: string) => {
       setInputValue(suggestion);
       setShowSuggestions(false);
+      setHasSelected(true);
       if (onSuggestionSelect) {
         onSuggestionSelect(suggestion);
       }
@@ -124,7 +127,7 @@ const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => {
-            if (inputValue.length > 0 && filteredSuggestions.length > 0) {
+            if (!hasSelected && inputValue.length > 0 && filteredSuggestions.length > 0) {
               setShowSuggestions(true);
             }
           }}

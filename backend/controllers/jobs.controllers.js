@@ -59,7 +59,7 @@ const handelAppliedJob = async (req, res) => {
   }
 };
 const handelDeliverFilterData = async (req, res) => {
-  const { title,location, company } = req.query;
+  const { title,location, company,salary,jobType,} = req.query;
   console.log(`title is ${title}`);
   
 let filter={};
@@ -72,7 +72,10 @@ let filter={};
 if (company && company.trim() !== "") {
   filter.company = new RegExp(company, "i")
 }
- console.log(filter);
+if(jobType && jobType.trim() !== ""){
+  filter.jobType = new RegExp(jobType,"i")
+}
+
  
   try {
     const filterJob = await Job.find(filter);
